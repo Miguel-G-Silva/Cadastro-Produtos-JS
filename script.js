@@ -7,9 +7,9 @@ const tituloFormulario = document.getElementById("titulo-formulario");
 
 let produtoEditando = null;
 
-form.addEventListener("submit", addProduct);
+form.addEventListener("submit", addProduto);
 
-function addProduct(event) {
+function addProduto(event) {
     event.preventDefault();
 
     const produto = {
