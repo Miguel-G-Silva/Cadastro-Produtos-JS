@@ -1,16 +1,16 @@
-const form = document.getElementById("form");
+const formulario = document.getElementById("form");
 const nomeProduto = document.getElementById("nome-produto");
 const precoProduto = document.getElementById("preco-produto");
 const categoriaProduto = document.getElementById("cat-produto");
-const productTableBody = document.getElementById("produtos-mostrados");
+const corpoTabelaProdutos = document.getElementById("produtos-mostrados");
 const tituloFormulario = document.getElementById("titulo-formulario");
 
 let produtoEditando = null;
 
-form.addEventListener("submit", addProduto);
+formulario.addEventListener("submit", adicionarProduto);
 
-function addProduto(event) {
-    event.preventDefault();
+function adicionarProduto(evento) {
+    evento.preventDefault();
 
     const produto = {
         nome: nomeProduto.value,
@@ -24,22 +24,22 @@ function addProduto(event) {
     }
 
     if (produtoEditando) {
-        updateProdutoTabela(produto);
-        updateProdutoLocalStorage(produto);
+        atualizarProdutoTabela(produto);
+        atualizarProdutoLocalStorage(produto);
         tituloFormulario.textContent = "Adicionar Produto";
     } else {
-        addProdutoTabela(produto);
-        saveProduto(produto);
+        adicionarProdutoTabela(produto);
+        salvarProduto(produto);
     }
 
-    form.reset();
+    formulario.reset();
     produtoEditando = null;
 }
 
-function addProdutoTabela(produto) {
-    const row = document.createElement('tr');
+function adicionarProdutoTabela(produto) {
+    const linha = document.createElement('tr');
 
-    row.innerHTML = `
+    linha.innerHTML = `
         <td>${produto.nome}</td>
         <td>${produto.preco}</td>
         <td>${produto.categoria}</td>
@@ -49,55 +49,55 @@ function addProdutoTabela(produto) {
         </td>
     `;
 
-    row.querySelector('.editar').addEventListener('click', () => {
-        editProduto(row, produto);
+    linha.querySelector('.editar').addEventListener('click', () => {
+        editarProduto(linha, produto);
     });
 
-    row.querySelector('.remover').addEventListener('click', () => {
-        removeProduto(row, produto);
+    linha.querySelector('.remover').addEventListener('click', () => {
+        removerProduto(linha, produto);
     });
 
-    productTableBody.appendChild(row);
+    corpoTabelaProdutos.appendChild(linha);
 }
 
-function saveProduto(produto) {
+function salvarProduto(produto) {
     let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
     produtos.push(produto);
     localStorage.setItem('produtos', JSON.stringify(produtos));
 }
 
-function loadProdutos() {
+function carregarProdutos() {
     let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
-    produtos.forEach(produto => addProdutoTabela(produto));
+    produtos.forEach(produto => adicionarProdutoTabela(produto));
 }
 
-function removeProduto(row, produto) {
-    row.remove();
+function removerProduto(linha, produto) {
+    linha.remove();
 
     let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
     produtos = produtos.filter(p => p.nome !== produto.nome || p.preco !== produto.preco || p.categoria !== produto.categoria);
     localStorage.setItem('produtos', JSON.stringify(produtos));
 }
 
-function editProduto(row, produto) {
+function editarProduto(linha, produto) {
     nomeProduto.value = produto.nome;
     precoProduto.value = produto.preco;
     categoriaProduto.value = produto.categoria;
     produtoEditando = produto;
 
     tituloFormulario.textContent = "Editar Produto"; 
-    row.remove();
-    removeProduto(row, produto);
+    linha.remove();
+    removerProduto(linha, produto);
 }
 
-function updateProdutoTabela(produto) {
-    addProdutoTabela(produto);
+function atualizarProdutoTabela(produto) {
+    adicionarProdutoTabela(produto);
 }
 
-function updateProdutoLocalStorage(produto) {
+function atualizarProdutoLocalStorage(produto) {
     let produtos = JSON.parse(localStorage.getItem('produtos')) || [];
     produtos.push(produto);
     localStorage.setItem('produtos', JSON.stringify(produtos));
 }
 
-document.addEventListener('DOMContentLoaded', loadProdutos);
+document.addEventListener('DOMContentLoaded', carregarProdutos);
