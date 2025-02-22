@@ -1,2 +1,3 @@
 ﻿# Cadastro-de-Produtos-JS-API
 
+Projeto simples de cadastro de produto em js, feito em sala de aula...
